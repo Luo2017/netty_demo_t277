@@ -39,6 +39,9 @@ public class NettyServer {
             bossGroup.shutdownGracefully().sync();
             workerGroup.shutdownGracefully().sync();
         }
+    }
 
+    public static void main(String[] args) throws Exception {
+        new NettyServer(8088).start();
     }
 }
