@@ -2,6 +2,8 @@ package com.nettyByteBufTest;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
 
 public class ByteBufTest {
 
@@ -22,6 +24,11 @@ public class ByteBufTest {
         System.out.println("buf.getInt(2)" + buf.getInt(2));
         getByteBufInfo("buf.setInt(2, 2000) 后", buf);
 //        buf.writeBytes(new byte[]{1,2,3,4}); 超出最大容量会出错
+
+
+        CompositeByteBuf compositeByteBuf = Unpooled.compositeBuffer();
+        int length = compositeByteBuf.readableBytes();
+        System.out.println("\n\n***\n\ncomBuf.length() = " + length);
     }
 
     private static void getByteBufInfo(String step, ByteBuf buf) {
