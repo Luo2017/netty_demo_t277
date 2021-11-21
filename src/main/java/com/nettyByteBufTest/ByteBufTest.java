@@ -25,7 +25,8 @@ public class ByteBufTest {
         getByteBufInfo("buf.setInt(2, 2000) 后", buf);
 //        buf.writeBytes(new byte[]{1,2,3,4}); 超出最大容量会出错
 
-
+        // CompositeByteBuf 包含了堆缓冲区和直接缓冲区两种模式
+        // Unpooled 是 netty 提供的对 BYteBuf 进行操作的工作类，可以用来创建 ByteBuf
         CompositeByteBuf compositeByteBuf = Unpooled.compositeBuffer();
         int length = compositeByteBuf.readableBytes();
         System.out.println("\n\n***\n\ncomBuf.length() = " + length);
