@@ -10,6 +10,7 @@ public class ByteBufTest {
     public static void main(String[] args) {
         // 下面创建了 initialCapacity 为 6 和 maxCapacity 为 10 的 ByteBuf
         // 6 指的就是可以写的 byte 数
+        // ByteBufAllocator 可以看 netty 基础部分第 5 节对 ByteBuf 的介绍
         ByteBuf buf = ByteBufAllocator.DEFAULT.buffer(6, 10);
         getByteBufInfo("buf 的 initial state", buf);
         buf.writeBytes(new byte[]{1, 2});
