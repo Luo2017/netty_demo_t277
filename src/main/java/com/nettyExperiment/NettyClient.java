@@ -33,7 +33,10 @@ public class NettyClient {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new EchoClientHandler("clientInboundHandler1"))
                             .addLast(new EchoClientHandler("clientInboundHandler2"))
-                            .addLast(new EchoClientHandler("clientInboundHandler3"));
+                            .addLast(new EchoClientHandler("clientInboundHandler3"))
+                            .addLast(new EchoClientOutboundHandler("clientOutboundHandler1"))
+                            .addLast(new EchoClientOutboundHandler("clientOutboundHandler2"))
+                            .addLast(new EchoClientOutboundHandler("clientOutboundHandler3"));
                         }
                     });
             ChannelFuture f = b.connect().sync(); // 注意不是 bind() 监听端口
