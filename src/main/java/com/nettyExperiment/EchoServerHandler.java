@@ -13,6 +13,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("服务端 channel active!");
+        System.out.println("服务端的子 channel 的 socketAddress 为 : " + ctx.channel().localAddress()); // 8088 端口号一致
         // 没有必要一定向后面传播这个 active 的消息
     }
 

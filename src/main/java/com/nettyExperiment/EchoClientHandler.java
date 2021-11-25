@@ -1,6 +1,7 @@
 package com.nettyExperiment;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,6 +27,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 当被通知 channel 活跃时，发送一条消息，即与服务器的链接建立之后被调用
         System.out.println("客户端 " + handlerName +" channel active!");
+        String.valueOf(12);
         super.channelActive(ctx);
         // 从 pipelien 的 tail 开始向前写，但是 tailHandler 没有实现 OutboundHandler，它只是调用 tailCtx.write() 操作
         ctx.pipeline().writeAndFlush(Unpooled.copiedBuffer("客户端发来的消息-客户端已经 active 来自 " + handlerName + "\n", CharsetUtil.UTF_8));
