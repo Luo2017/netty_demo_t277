@@ -27,6 +27,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         // 当被通知 channel 活跃时，发送一条消息，即与服务器的链接建立之后被调用
         System.out.println("客户端 " + handlerName +" channel active!");
         super.channelActive(ctx);
+//        ctx.channel().writeAndFlush("haha");
         // 从 pipelien 的 tail 开始向前写，但是 tailHandler 没有实现 OutboundHandler，它只是调用 tailCtx.write() 操作
         ctx.pipeline().writeAndFlush("客户端发来的 String 类型的消息-客户端已经 active 来自" + handlerName);
         ctx.pipeline().writeAndFlush(Unpooled.copiedBuffer("客户端发来的普通类型的消息-客户端已经 active 来自 " + handlerName + "\n", CharsetUtil.UTF_8));

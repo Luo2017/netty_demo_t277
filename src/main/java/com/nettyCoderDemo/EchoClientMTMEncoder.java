@@ -9,7 +9,10 @@ import java.util.List;
 public class EchoClientMTMEncoder extends MessageToMessageEncoder<String> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, String s, List<Object> list) throws Exception {
+        System.out.println("EchoClientMTMEncoder 正在处理 String 类型的出站消息");
         // 将出站消息分成每段 4 个字符的字符串
+        // List 中的消息被传递给下一个出站 handler 不会从整个 pipeline 开始传递
+        // 正是因为 EchoClientEncoder 处理的也是 String 类型的消息，所以才可以传递给它
         for (int i = 0; i < s.length();) {
             if (i + 4 < s.length()) {
                 list.add(s.substring(i, i + 4) + " "); // 0 - 3
