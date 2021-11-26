@@ -11,7 +11,7 @@ public class EchoClientEncoder extends MessageToByteEncoder<String> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, String s, ByteBuf byteBuf) throws Exception {
         System.out.println("客户端 EchoClientEncoder 开始编码，编码前消息为：" + s);
-        String apdMsg = " [encode from client] ";
+        String apdMsg = "[encode from client]";
         byte[] apdMsgBytes = apdMsg.getBytes();
         for (int i = 0; i < 10000; i++) {
             byteBuf.writeBytes(s.getBytes());

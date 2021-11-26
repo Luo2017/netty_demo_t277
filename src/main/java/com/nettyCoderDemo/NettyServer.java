@@ -30,6 +30,7 @@ public class NettyServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
+                                    .addLast(new ServerByteDecoder())
                                     .addLast(echoServerHandler);
                         }
                     });

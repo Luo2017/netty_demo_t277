@@ -15,10 +15,10 @@ public class EchoClientMTMEncoder extends MessageToMessageEncoder<String> {
         // 正是因为 EchoClientEncoder 处理的也是 String 类型的消息，所以才可以传递给它
         for (int i = 0; i < s.length();) {
             if (i + 4 < s.length()) {
-                list.add(s.substring(i, i + 4) + " "); // 0 - 3
+                list.add(s.substring(i, i + 4)); // 0 - 3
                 i += 4;
             } else {
-                list.add(s.substring(i) + " ");
+                list.add(s.substring(i));
                 break;
             }
         }
