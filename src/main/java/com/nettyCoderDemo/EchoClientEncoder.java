@@ -3,6 +3,9 @@ package com.nettyCoderDemo;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
+
+import java.util.List;
 
 public class EchoClientEncoder extends MessageToByteEncoder<String> {
     @Override
@@ -14,3 +17,4 @@ public class EchoClientEncoder extends MessageToByteEncoder<String> {
         byteBuf.writeBytes(apdMsgBytes);
     }
 }
+
