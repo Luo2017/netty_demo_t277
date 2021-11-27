@@ -8,6 +8,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ChannelHandler.Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
@@ -22,10 +25,10 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 //        if (msg instanceof String) {
 //            System.out.println("hello");
 //        }
-//        ByteBuf in = (ByteBuf) msg;
-//        System.out.println("服务器收到消息：" + in.toString(CharsetUtil.UTF_8));
-        String in = (String) msg;
-        System.out.println("服务器收到消息： " + in);
+        ByteBuf in = (ByteBuf) msg;
+        System.out.println("服务器收到消息：" + in.toString(CharsetUtil.UTF_8));
+//        String in = (String) msg;
+//        System.out.println("服务器收到消息： " + in);
 //        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端发来的消息-服务端收到消息！\n", CharsetUtil.UTF_8));
     }
 
