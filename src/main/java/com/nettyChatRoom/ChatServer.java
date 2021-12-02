@@ -21,10 +21,9 @@ import io.netty.util.concurrent.ImmediateEventExecutor;
 import java.net.InetSocketAddress;
 
 public class ChatServer {
-    private ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
+    private final ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
 
     public void start() throws Exception {
-        final EchoServerHandler echoServerHandler = new EchoServerHandler();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
@@ -47,7 +46,6 @@ public class ChatServer {
             ChannelFuture f = b.bind().sync();
             f.channel().closeFuture().sync();
         } finally {
-            channelGroup.close();
             bossGroup.shutdownGracefully().sync();
             workerGroup.shutdownGracefully().sync();
         }

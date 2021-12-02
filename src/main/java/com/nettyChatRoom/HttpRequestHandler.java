@@ -38,19 +38,19 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
-        if (wsUri.equalsIgnoreCase(fullHttpRequest.getUri())) {
+        if (wsUri.equalsIgnoreCase(fullHttpRequest.uri())) {
             channelHandlerContext.fireChannelRead(fullHttpRequest.retain());
         } else {
             if (HttpHeaders.is100ContinueExpected(fullHttpRequest)) {
                 send100Continue(channelHandlerContext);
             }
             RandomAccessFile file = new RandomAccessFile(INDEX, "r");
-            HttpResponse response = new DefaultFullHttpResponse(fullHttpRequest.getProtocolVersion(), HttpResponseStatus.OK);
-            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
+            HttpResponse response = new DefaultFullHttpResponse(fullHttpRequest.protocolVersion(), HttpResponseStatus.OK);
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
             boolean keepAlive = HttpHeaders.isKeepAlive(fullHttpRequest);
             if (keepAlive) {
-                response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, file.length());
-                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+                response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
+                response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             }
             channelHandlerContext.write(response); // 最后 flush 一次即可
             if (channelHandlerContext.pipeline().get(SslHandler.class) == null) {
