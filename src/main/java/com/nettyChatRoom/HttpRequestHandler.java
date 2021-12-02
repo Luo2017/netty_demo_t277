@@ -45,7 +45,8 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                 send100Continue(channelHandlerContext);
             }
             RandomAccessFile file = new RandomAccessFile(INDEX, "r");
-            HttpResponse response = new DefaultFullHttpResponse(fullHttpRequest.protocolVersion(), HttpResponseStatus.OK);
+            // 注意不是 DefaultFullHttpResponse，因为三部分才是一个完整的
+            HttpResponse response = new DefaultHttpResponse(fullHttpRequest.protocolVersion(), HttpResponseStatus.OK);
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
             boolean keepAlive = HttpHeaders.isKeepAlive(fullHttpRequest);
             if (keepAlive) {
@@ -59,6 +60,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                 channelHandlerContext.write(new ChunkedNioFile(file.getChannel()));
             }
             ChannelFuture future = channelHandlerContext.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+            // 分成三部分发送，浏览器端将会识别到一个完整的 http response，以 LastHttpContent 作为结尾，从而解析出来
             if (!keepAlive) {
                 future.addListener(ChannelFutureListener.CLOSE); // 最后的 flush 操作完成会自动关闭，写是按照顺序的
             }
