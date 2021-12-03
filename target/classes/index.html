@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <title>聊天室</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
     <style type="text/css">
-        span{color:red;font-size:88px; }
+        .mainContent{
+            width: 700px;
+            margin-left: 25%;
+        }
+        .chatTitle{
+            margin-top: 70px;
+            margin-bottom: 20px;
+            font-size: large;
+            font-weight: bolder;
+        }
+        #chatRoomLines{
+            color: darkred;
+            font-weight: bold;
+            margin-left: 10px;
+        }
     </style>
 
     <script type="text/javascript">
@@ -18,7 +34,7 @@
 
         myWebWocket.onopen = function (e) {
             var chatLines = document.getElementById("chatRoomLines");
-            chatLines.value += "已连接到 netty 服务器，协议 websocket. \r\n";
+            chatLines.value += "  已连接到 netty 服务器，基于 websocket. \n\n" + "  **********************************\r\n\n";
         }
 
         myWebWocket.onclose = function (e) {
@@ -26,28 +42,47 @@
         }
 
         myWebWocket.onmessage = function (e) {
-            var chatLines = document.getElementById("chatRoomLines");
-            chatLines.value += e.data + "\r\n"
+            // 不用 var 用 let
+            let chatLines = document.getElementById("chatRoomLines");
+            var d = new Date();
+            chatLines.value += "接收消息时间： " + d.getFullYear() + " 年 " + d.getMonth() + " 月 " + d.getDay() + " 日 " + d.getHours() + " 时 " + d.getMinutes() + " 分 " + d.getSeconds() + " 秒;" + "\r\n";
+            chatLines.value += "[匿名用户]: " + e.data + "\r\r\n"
         }
 
         myWebWocket.onerror = function (e) {
             alert("websocket 出现错误！")
         }
 
-        function sendMsg(msg) {
-            myWebWocket.send(msg);
+        function clean() {
+            let inputMsg = document.getElementById("inputMsg");
+            myWebWocket.send(inputMsg.value);
+            inputMsg.value="";
+        }
+
+        function sendMsg() {
+            // 注意 getElementsByName 得到的是数组，因为name可以重复
+            // 所以要以处理数组的方式处理
+            let inputMsg = document.getElementById("inputMsg");
+            // alert(inputMsg.value);
+            myWebWocket.send(inputMsg.value);
         }
     </script>
 </head>
 <body>
-<label> 聊天大厅 </label><br/>
-<textarea id="chatRoomLines" style="width: 200px; height: 200px"></textarea>
 
-    <form>
-        <input type="text" name="inputMsg" class="inputMsg">
-        <input type="button" name="sendBtn" class="sendBtn" value="发送消息" onclick="sendMsg(this.form.inputMsg.value)">
-    </form>
-
+    <div class="mainContent">
+        <p align="center" class="chatTitle"> 聊天室 </p>
+        <textarea id="chatRoomLines" class="form-control" rows="22" style="background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%)"></textarea>
+        <br/>
+        <form name="myForm" onsubmit="clean(); return false;">
+        <div class="input-group">
+            <input type="text" class="form-control" id="inputMsg" name="inputMsg" placeholder="输入消息">
+            <span class="input-group-btn">
+            <input type="button" class="btn btn-primary" value="发送" onclick="sendMsg()" />
+          </span>
+        </div>
+        </form>
+    </div>
 
 </body>
 </html>

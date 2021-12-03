@@ -39,6 +39,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
         if (wsUri.equalsIgnoreCase(fullHttpRequest.getUri())) {
+            // 经过测试这个删除了之后无法建立 websocket 握手，所有 ws 握手是 下一个 ws handler 完成的
             channelHandlerContext.fireChannelRead(fullHttpRequest.retain());
         } else {
             if (HttpHeaders.is100ContinueExpected(fullHttpRequest)) {
