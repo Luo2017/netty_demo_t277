@@ -15,9 +15,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.ImmediateEventExecutor;
 
+import javax.net.ssl.SSLEngine;
 import java.net.InetSocketAddress;
 
 public class ChatServer {
@@ -34,7 +38,12 @@ public class ChatServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            SelfSignedCertificate cert = new SelfSignedCertificate();
+                            SslContext sslContext = SslContext.newServerContext(cert.certificate(), cert.privateKey());
+                            SSLEngine engine = sslContext.newEngine(socketChannel.alloc());
+                            engine.setUseClientMode(false);
                             socketChannel.pipeline()
+//                                    .addFirst(new SslHandler(engine))
                                     .addLast(new HttpServerCodec())
                                     .addLast(new ChunkedWriteHandler())
                                     .addLast(new HttpObjectAggregator(64 * 1024))
@@ -46,6 +55,7 @@ public class ChatServer {
             ChannelFuture f = b.bind().sync();
             f.channel().closeFuture().sync();
         } finally {
+            channelGroup.close();
             bossGroup.shutdownGracefully().sync();
             workerGroup.shutdownGracefully().sync();
         }

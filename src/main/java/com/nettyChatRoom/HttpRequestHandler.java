@@ -38,7 +38,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
-        if (wsUri.equalsIgnoreCase(fullHttpRequest.uri())) {
+        if (wsUri.equalsIgnoreCase(fullHttpRequest.getUri())) {
             channelHandlerContext.fireChannelRead(fullHttpRequest.retain());
         } else {
             if (HttpHeaders.is100ContinueExpected(fullHttpRequest)) {
@@ -46,18 +46,18 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             }
             RandomAccessFile file = new RandomAccessFile(INDEX, "r");
             // 注意不是 DefaultFullHttpResponse，因为三部分才是一个完整的
-            HttpResponse response = new DefaultHttpResponse(fullHttpRequest.protocolVersion(), HttpResponseStatus.OK);
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
+            HttpResponse response = new DefaultHttpResponse(fullHttpRequest.getProtocolVersion(), HttpResponseStatus.OK);
+            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/html; charset=UTF-8");
             boolean keepAlive = HttpHeaders.isKeepAlive(fullHttpRequest);
             if (keepAlive) {
-                response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
-                response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+                response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, file.length());
+                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
             }
             channelHandlerContext.write(response); // 最后 flush 一次即可
             if (channelHandlerContext.pipeline().get(SslHandler.class) == null) {
                 channelHandlerContext.write(new DefaultFileRegion(file.getChannel(), 0, file.length()));
             } else {
-                channelHandlerContext.write(new ChunkedNioFile(file.getChannel()));
+                channelHandlerContext.write(new ChunkedNioFile(file.getChannel())); // ssl 传递要用这个
             }
             ChannelFuture future = channelHandlerContext.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
             // 分成三部分发送，浏览器端将会识别到一个完整的 http response，以 LastHttpContent 作为结尾，从而解析出来

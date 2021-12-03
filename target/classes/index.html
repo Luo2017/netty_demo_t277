@@ -1,11 +1,53 @@
-
+<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8">
     <title>聊天室</title>
 
+    <style type="text/css">
+        span{color:red;font-size:88px; }
+    </style>
+
+    <script type="text/javascript">
+        if (!WebSocket) {
+            alert("浏览器不支持 WebSocket")
+        }
+
+        //客户端发起 websocket 协议的连接
+        var myWebWocket = new WebSocket("ws://localhost:8088/ws");
+
+        myWebWocket.onopen = function (e) {
+            var chatLines = document.getElementById("chatRoomLines");
+            chatLines.value += "已连接到 netty 服务器，协议 websocket. \r\n";
+        }
+
+        myWebWocket.onclose = function (e) {
+            alert("websocket 连接已经关闭！")
+        }
+
+        myWebWocket.onmessage = function (e) {
+            var chatLines = document.getElementById("chatRoomLines");
+            chatLines.value += e.data + "\r\n"
+        }
+
+        myWebWocket.onerror = function (e) {
+            alert("websocket 出现错误！")
+        }
+
+        function sendMsg(msg) {
+            myWebWocket.send(msg);
+        }
+    </script>
 </head>
 <body>
-hh
+<label> 聊天大厅 </label><br/>
+<textarea id="chatRoomLines" style="width: 200px; height: 200px"></textarea>
+
+    <form>
+        <input type="text" name="inputMsg" class="inputMsg">
+        <input type="button" name="sendBtn" class="sendBtn" value="发送消息" onclick="sendMsg(this.form.inputMsg.value)">
+    </form>
+
+
 </body>
 </html>
