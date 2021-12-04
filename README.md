@@ -33,13 +33,10 @@ websocket 非常适合实时通讯场景。建立连接后，客户端和服务�
 启动 ChatServer 类，可以在浏览器的多个页面访问 http://localhost:8088/ 
 得到页面如下：
 ![img01](./imgs/img01.png)
-<img src="./imgs/img01.png" height="50%" width="50%" align="center" />
-<br/>
 在不同的页面输入消息，点击发送，不同的页面会收到相应的消息：
-<img src="./imgs/img02.png" height="50%" width="50%" align="center" />
+![img02](./imgs/img02.png)
 另一个浏览器页面同时可以发送消息，并且接收消息：
-<img src="./imgs/img03.png" height="50%" width="50%" align="center" />
-<br/>
+![img03](./imgs/img03.png)
 
 # 总结 🗡
 最近学习了解了 netty 的一些知识，体会到了 netty 的强大，自定义通信协议，nio 的进一步升级，在编写实例的时候，单步调试阅读源码，对 netty 的学习有更好的帮助。
