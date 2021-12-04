@@ -25,9 +25,10 @@ websocket 非常适合实时通讯场景。建立连接后，客户端和服务�
 - http 聚合器（`HttpObjectAggregator`）;
 - 自定义的 `HttpRequestHandler`，主要功能是返回客户端 index.html 文件；
 - 升级协议处理器 `WebSocketServerProtocolHandler`，这个是 netty 预置处理器，它会在建立 websocket 握手后，将 pipeline 中的所有 http 相关的处理器（编码器和解码器等）替换成 websocket 处理器（编码器和解码器等）；
-- 自定义的 `TextWebSocketFrameHandler`，主要负责将接收的 websocket 类型消息发送给每个客户端；
+- 自定义的 `TextWebSocketFrameHandler`，主要负责将接收的 websocket 类型消息发送给每个客户端.
+
 将以上的 handler 加入 pipeline 中，定义对应的引导类即可.
-我们的注释中实际上支持了 ssl，但是由于 ssl 和 websocket 对于浏览器有要求，所以我们下面的演示没有演示 ssl 的版本。  
+我们的注释中实际上支持了 ssl 机制，但是由于 ssl 和 websocket 对于浏览器有要求，所以我们下面的演示没有演示 ssl 的版本。  
   
 ## ChatRoom 演示 🎹
 启动 ChatServer 类，可以在浏览器的多个页面访问 http://localhost:8088/ 
