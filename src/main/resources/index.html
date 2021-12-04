@@ -65,6 +65,7 @@
             let inputMsg = document.getElementById("inputMsg");
             // alert(inputMsg.value);
             myWebWocket.send(inputMsg.value);
+            inputMsg.value="";
         }
     </script>
 </head>
